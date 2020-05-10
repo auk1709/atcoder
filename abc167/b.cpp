@@ -1,17 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main()
-{
+int main() {
   long long a, b, c, k, ans = 0;
   cin >> a >> b >> c >> k;
 
-  if (a + b >= k)
-  {
+  if (a > k) {
+    ans = k;
+  } else if (a + b >= k) {
     ans = a;
-  }
-  else
-  {
+  } else {
     ans = a - (k - (a + b));
   }
 
