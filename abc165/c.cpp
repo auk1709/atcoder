@@ -1,22 +1,36 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+int n, m, q;
+vector<int> a;
+vector<int> b;
+vector<int> c;
+vector<int> d;
+int ans;
+void dfs(vector<int> A) {
+  if (A.size() == n + 1) {
+    int now = 0;
+    for (int i = 0; i < q; i++) {
+      if (A[b[i]] - A[a[i]] == c[i]) now += d[i];
+    }
+    ans = max(ans, now);
+    return;
+  }
+
+  A.push_back(A.back());
+  while (A.back() <= m) {
+    dfs(A);
+    A.back()++;
+  }
+}
+
 int main() {
-  int n, m, q, e, f, g, h;
   cin >> n >> m >> q;
 
-  vector<int> a;
-  vector<int> b;
-  vector<int> c;
-  vector<int> d;
+  a = b = c = d = vector<int>(q);
   for (int i = 0; i < q; i++) {
-    cin >> e >> f >> g >> h;
-    a.push_back(e);
-    b.push_back(f);
-    c.push_back(g);
-    d.push_back(h);
+    cin >> a[i] >> b[i] >> c[i] >> d[i];
   }
-  vector<int> A(n);
-  for (int bit = 0; bit < (1 << n); ++bit) {
-  }
+  dfs(vector<int>(1, 1));
+  cout << ans << endl;
 }
