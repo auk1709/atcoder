@@ -1,55 +1,33 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-int n;
-vector<int> a(100000);
-void check(long long* ans, long long* now, long long base, int i) {
-  long long before;
-  if (*now + a[i - 1] <= base) {
-    before = *now;
-    *now = *now + a[i - 1];
-  } else if ((((*now + 1) / 2) + a[i - 1]) <= base) {
-    before = *now;
-    *now = base;
-  } else {
-    *now--;
-    *ans--;
-    if (*now < (before + 1) / 2) {
-      *ans = -1;
-      return;
-    }
-    check(ans, now, base, i);
-  }
-}
+const long long INF = 1e18;
 
 int main() {
+  int n;
   cin >> n;
+  vector<int> a(n + 1);
   for (int i = 0; i < n + 1; i++) {
     cin >> a[i];
   }
+  vector<long long> b(n + 1);
+  b[0] = 1 - a[0];
+  for (int i = 1; i < n + 1; i++) {
+    b[i] = min((2 * b[i - 1]) - a[i], INF);
+    if (b[i] < 0) {
+      cout << -1 << endl;
+      return 0;
+    }
+  }
 
-  long long ans = 0, now = a[n];
-  long long before;
-  for (int i = n; i >= 0; i--) {
-    ans += now;
-    if (i == 0) break;
-    long long base = pow(2, i - 1);
-    check(&ans, &now, base, i);
-    if (ans == -1) break;
-    // if (now + a[i - 1] <= base) {
-    //   before = now;
-    //   now = now + a[i - 1];
-    // } else if ((((now + 1) / 2) + a[i - 1]) <= base) {
-    //   before = now;
-    //   now = base;
-    // } else {
-    //   now--;
-    //   ans--;
-    //   if (now < (before + 1) / 2) {
-    //     ans = -1;
-    //     break;
-    //   }
-    // }
+  vector<long long> c(n + 1);
+  c[n] = a[n];
+  for (int i = n - 1; i >= 0; i--) {
+    c[i] = min(c[i + 1], b[i]) + a[i];
+  }
+
+  long long ans = 0;
+  for (int i = 0; i < n + 1; i++) {
+    ans += c[i];
   }
 
   cout << ans << endl;
